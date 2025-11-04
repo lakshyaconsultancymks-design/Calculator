@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simple PWA Calculator</title>
+
+  <!-- Manifest and Theme -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4CAF50">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .calculator {
+      background: #1f1f1f;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      width: 300px;
+    }
+
+    .display {
+      width: 100%;
+      height: 60px;
+      background: #000;
+      color: #0f0;
+      font-size: 2rem;
+      text-align: right;
+      padding: 10px;
+      border-radius: 8px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    button {
+      padding: 15px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 8px;
+      background: #333;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #4CAF50;
+    }
+
+    button.equal {
+      grid-column: span 2;
+      background: #4CAF50;
+    }
+
+    button.clear {
+      background: #f44336;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Simple PWA Calculator</h2>
+  <div class="calculator">
+    <div class="display" id="display">0</div>
+    <div class="buttons">
+      <button onclick="clearDisplay()" class="clear">C</button>
+      <button onclick="deleteLast()">⌫</button>
+      <button onclick="append('%')">%</button>
+      <button onclick="append('/')">÷</button>
+
+      <button onclick="append('7')">7</button>
+      <button onclick="append('8')">8</button>
+      <button onclick="append('9')">9</button>
+      <button onclick="append('*')">×</button>
+
+      <button onclick="append('4')">4</button>
+      <button onclick="append('5')">5</button>
+      <button onclick="append('6')">6</button>
+      <button onclick="append('-')">−</button>
+
+      <button onclick="append('1')">1</button>
+      <button onclick="append('2')">2</button>
+      <button onclick="append('3')">3</button>
+      <button onclick="append('+')">+</button>
+
+      <button onclick="append('0')">0</button>
+      <button onclick="append('.')">.</button>
+      <button onclick="calculate()" class="equal">=</button>
+    </div>
+  </div>
+
+  <script>
+    let display = document.getElementById('display');
+    function append(value) {
+      if (display.innerText === '0') display.innerText = '';
+      display.innerText += value;
+    }
+    function clearDisplay() {
+      display.innerText = '0';
+    }
+    function deleteLast() {
+      display.innerText = display.innerText.slice(0, -1) || '0';
+    }
+    function calculate() {
+      try {
+        display.innerText = eval(display.innerText.replace('÷', '/').replace('×', '*'));
+      } catch {
+        display.innerText = 'Error';
+      }
+    }
+
+    // Register service worker for PWA
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('Service Worker Registered'))
+        .catch(err => console.log('SW registration failed:', err));
+    }
+  </script>
+</body>
+</html>
