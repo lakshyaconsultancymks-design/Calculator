@@ -2,16 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Simple PWA Calculator</title>
 
-  <!-- Manifest and Theme -->
+  <!-- ✅ PWA Meta -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#4CAF50">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Calculator">
+
+  <!-- ✅ Favicon & Icon -->
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 
   <style>
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
+      height: 100%;
       font-family: Arial, sans-serif;
       background-color: #121212;
       color: #fff;
@@ -19,15 +28,24 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      user-select: none;
+      -webkit-user-select: none;
+      overflow: hidden;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
+      color: #4CAF50;
     }
 
     .calculator {
       background: #1f1f1f;
       border-radius: 16px;
       padding: 20px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
-      width: 300px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      width: 90%;
+      max-width: 320px;
     }
 
     .display {
@@ -40,7 +58,7 @@
       padding: 10px;
       border-radius: 8px;
       box-sizing: border-box;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       overflow: hidden;
     }
 
@@ -54,11 +72,11 @@
       padding: 15px;
       font-size: 1.2rem;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       background: #333;
       color: #fff;
       cursor: pointer;
-      transition: 0.2s;
+      transition: background 0.2s;
     }
 
     button:hover {
@@ -73,11 +91,18 @@
     button.clear {
       background: #f44336;
     }
+
+    @media (display-mode: standalone) {
+      body {
+        height: 100vh;
+        overflow: hidden;
+      }
+    }
   </style>
 </head>
-<body>
 
-  <h2>Simple PWA Calculator</h2>
+<body>
+  <h2>Simple Calculator</h2>
   <div class="calculator">
     <div class="display" id="display">0</div>
     <div class="buttons">
@@ -108,17 +133,21 @@
   </div>
 
   <script>
-    let display = document.getElementById('display');
+    const display = document.getElementById('display');
+
     function append(value) {
-      if (display.innerText === '0') display.innerText = '';
+      if (display.innerText === '0' || display.innerText === 'Error') display.innerText = '';
       display.innerText += value;
     }
+
     function clearDisplay() {
       display.innerText = '0';
     }
+
     function deleteLast() {
       display.innerText = display.innerText.slice(0, -1) || '0';
     }
+
     function calculate() {
       try {
         display.innerText = eval(display.innerText.replace('÷', '/').replace('×', '*'));
@@ -127,12 +156,12 @@
       }
     }
 
-    // Register service worker
+    // ✅ Register Service Worker for PWA
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('service-worker.js')
           .then(() => console.log('✅ Service Worker Registered'))
-          .catch(err => console.log('❌ SW registration failed:', err));
+          .catch(err => console.log('❌ Service Worker failed:', err));
       });
     }
   </script>
