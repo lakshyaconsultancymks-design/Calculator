@@ -10,9 +10,14 @@
   "theme_color": "#4CAF50",
   "icons": [
     {
-      "src": "https://icons.iconarchive.com/icons/igh0zt/ios7-style-metro-ui/192/MetroUI-Apps-Minecraft-icon.png",
+      "src": "https://assets.berty.tech/android-chrome-192x192.png",
       "sizes": "192x192",
-      "type": "png"
+      "type": "image/png"
+    },
+    {
+      "src": "https://assets.berty.tech/1_android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }
